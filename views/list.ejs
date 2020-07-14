@@ -1,0 +1,23 @@
+<%- include("header") -%>
+
+<div class="box" id="heading">
+  <h1> <%= listTitle[0].toUpperCase() + listTitle.slice(1, listTitle.length) %> </h1>
+</div>
+<div class="box">
+  <% newListItems.forEach(function(item){ %>
+  <div class="item">
+    <form action="/del" method="post">
+      <input type="checkbox" onchange="this.form.submit()">
+      <input type="hidden" name="_id" value=<%=item._id%>>
+      <input type="hidden" name="list" value=<%=listTitle%>>
+    </form>
+    <p> <%= item.todo %> </p>
+  </div>
+  <% }) %>
+  <form class="item" action="/" method="post">
+    <input type="text" name="newTodo" placeholder="New Item" autocomplete="off">
+    <button type="submit" name="list" value=<%= listTitle %>>+</button>
+  </form>
+</div>
+
+<%- include("footer") -%>
