@@ -47,8 +47,12 @@ app.get("/:customListName",function(req,res){
     res.render("list", {listTitle: doc.listName, newListItems: doc.list});
     else{
       const newList = new List({listName: customListName, list: []});
-      newList.save();
-      res.redirect("/" + customListName);
+      newList.save(function(err){
+        if(!err)
+        res.redirect("/" + customListName);
+        else
+        console.log(err);
+      });
     }
   });
 });
@@ -63,13 +67,17 @@ app.post("/",function(req,res){
 
   let listName = req.body.list;
   if(listName == "Today"){
-    item.save();
-    res.redirect("/");
+    item.save(function(err){
+      if(!err)
+      res.redirect("/");
+    });
   } else{
     List.findOne({listName: listName},function(err,doc){
       doc.list.push(item);
-      doc.save();
-      res.redirect("/" + listName);
+      doc.save(function(err){
+        if(!err)
+        res.redirect("/" + listName);
+      });
     });
   }
 });
@@ -89,8 +97,10 @@ app.post("/del",function(req,res){
   } else{
     List.findOne({listName: listName}, function(err,doc){
       doc.list.pull({_id: checkedItemId});
-      doc.save();
-      res.redirect("/" + listName);
+      doc.save(function(err){
+        if(!err)
+        res.redirect("/" + listName);
+      });
     });
   }
 });
